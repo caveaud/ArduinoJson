@@ -337,8 +337,10 @@ class JsonDeserializer {
 };
 
 template <typename TInput>
-DeserializationError deserializeJson(JsonDocument &doc, const TInput &input) {
-  return deserialize<JsonDeserializer>(doc, input);
+DeserializationError deserializeJson(
+    JsonDocument &doc, const TInput &input,
+    NestingLimit nestingLimit = NestingLimit()) {
+  return deserialize<JsonDeserializer>(doc, input, nestingLimit);
 }
 
 template <typename TInput>

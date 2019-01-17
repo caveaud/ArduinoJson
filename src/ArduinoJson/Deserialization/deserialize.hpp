@@ -27,11 +27,12 @@ TDeserializer<TReader, TWriter> makeDeserializer(MemoryPool &pool,
 // TString = const std::string&, const String&
 template <template <typename, typename> class TDeserializer, typename TString>
 typename enable_if<!is_array<TString>::value, DeserializationError>::type
-deserialize(JsonDocument &doc, const TString &input) {
+deserialize(JsonDocument &doc, const TString &input,
+            NestingLimit nestingLimit) {
   doc.clear();
   return makeDeserializer<TDeserializer>(
              doc.memoryPool(), makeReader(input),
-             makeStringStorage(doc.memoryPool(), input), doc.nestingLimit)
+             makeStringStorage(doc.memoryPool(), input), nestingLimit.value)
       .parse(doc.data());
 }
 //
