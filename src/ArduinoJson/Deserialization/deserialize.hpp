@@ -5,12 +5,13 @@
 #pragma once
 
 #include "../StringStorage/StringStorage.hpp"
-#include "./ArduinoStreamReader.hpp"
-#include "./CharPointerReader.hpp"
-#include "./DeserializationError.hpp"
-#include "./FlashStringReader.hpp"
-#include "./IteratorReader.hpp"
-#include "./StdStreamReader.hpp"
+#include "ArduinoStreamReader.hpp"
+#include "CharPointerReader.hpp"
+#include "DeserializationError.hpp"
+#include "FlashStringReader.hpp"
+#include "IteratorReader.hpp"
+#include "NestingLimit.hpp"
+#include "StdStreamReader.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -37,11 +38,12 @@ deserialize(JsonDocument &doc, const TString &input) {
 // DeserializationError deserialize(JsonDocument& doc, TChar* input);
 // TChar* = char*, const char*, const __FlashStringHelper*
 template <template <typename, typename> class TDeserializer, typename TChar>
-DeserializationError deserialize(JsonDocument &doc, TChar *input) {
+DeserializationError deserialize(JsonDocument &doc, TChar *input,
+                                 NestingLimit nestingLimit) {
   doc.clear();
   return makeDeserializer<TDeserializer>(
              doc.memoryPool(), makeReader(input),
-             makeStringStorage(doc.memoryPool(), input), doc.nestingLimit)
+             makeStringStorage(doc.memoryPool(), input), nestingLimit.value)
       .parse(doc.data());
 }
 //
@@ -50,11 +52,11 @@ DeserializationError deserialize(JsonDocument &doc, TChar *input) {
 // TChar* = char*, const char*, const __FlashStringHelper*
 template <template <typename, typename> class TDeserializer, typename TChar>
 DeserializationError deserialize(JsonDocument &doc, TChar *input,
-                                 size_t inputSize) {
+                                 size_t inputSize, NestingLimit nestingLimit) {
   doc.clear();
   return makeDeserializer<TDeserializer>(
              doc.memoryPool(), makeReader(input, inputSize),
-             makeStringStorage(doc.memoryPool(), input), doc.nestingLimit)
+             makeStringStorage(doc.memoryPool(), input), nestingLimit.value)
       .parse(doc.data());
 }
 //

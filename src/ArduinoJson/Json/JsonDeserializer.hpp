@@ -342,14 +342,17 @@ DeserializationError deserializeJson(JsonDocument &doc, const TInput &input) {
 }
 
 template <typename TInput>
-DeserializationError deserializeJson(JsonDocument &doc, TInput *input) {
-  return deserialize<JsonDeserializer>(doc, input);
+DeserializationError deserializeJson(
+    JsonDocument &doc, TInput *input,
+    NestingLimit nestingLimit = NestingLimit()) {
+  return deserialize<JsonDeserializer>(doc, input, nestingLimit);
 }
 
 template <typename TInput>
-DeserializationError deserializeJson(JsonDocument &doc, TInput *input,
-                                     size_t inputSize) {
-  return deserialize<JsonDeserializer>(doc, input, inputSize);
+DeserializationError deserializeJson(
+    JsonDocument &doc, TInput *input, size_t inputSize,
+    NestingLimit nestingLimit = NestingLimit()) {
+  return deserialize<JsonDeserializer>(doc, input, inputSize, nestingLimit);
 }
 
 template <typename TInput>
