@@ -358,7 +358,9 @@ DeserializationError deserializeJson(
 }
 
 template <typename TInput>
-DeserializationError deserializeJson(JsonDocument &doc, TInput &input) {
-  return deserialize<JsonDeserializer>(doc, input);
+DeserializationError deserializeJson(
+    JsonDocument &doc, TInput &input,
+    NestingLimit nestingLimit = NestingLimit()) {
+  return deserialize<JsonDeserializer>(doc, input, nestingLimit);
 }
 }  // namespace ARDUINOJSON_NAMESPACE

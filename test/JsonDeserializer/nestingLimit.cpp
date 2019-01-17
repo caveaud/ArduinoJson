@@ -80,4 +80,22 @@ TEST_CASE("JsonDeserializer nesting") {
       SHOULD_FAIL(deserializeJson(doc, std::string("[{\"toto\":1}]"), nesting));
     }
   }
+
+  SECTION("Input = std::istream") {
+    SECTION("limit = 0") {
+      DeserializationOption::NestingLimit nesting(0);
+      std::istringstream good("true");
+      std::istringstream bad("[]");
+      SHOULD_WORK(deserializeJson(doc, good, nesting));
+      SHOULD_FAIL(deserializeJson(doc, bad, nesting));
+    }
+
+    SECTION("limit = 1") {
+      DeserializationOption::NestingLimit nesting(1);
+      std::istringstream good("[\"toto\"]");
+      std::istringstream bad("{\"toto\":{}}");
+      SHOULD_WORK(deserializeJson(doc, good, nesting));
+      SHOULD_FAIL(deserializeJson(doc, bad, nesting));
+    }
+  }
 }

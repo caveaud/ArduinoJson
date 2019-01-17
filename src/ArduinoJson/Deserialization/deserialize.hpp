@@ -64,11 +64,12 @@ DeserializationError deserialize(JsonDocument &doc, TChar *input,
 // DeserializationError deserialize(JsonDocument& doc, TStream input);
 // TStream = std::istream&, Stream&
 template <template <typename, typename> class TDeserializer, typename TStream>
-DeserializationError deserialize(JsonDocument &doc, TStream &input) {
+DeserializationError deserialize(JsonDocument &doc, TStream &input,
+                                 NestingLimit nestingLimit) {
   doc.clear();
   return makeDeserializer<TDeserializer>(
              doc.memoryPool(), makeReader(input),
-             makeStringStorage(doc.memoryPool(), input), doc.nestingLimit)
+             makeStringStorage(doc.memoryPool(), input), nestingLimit.value)
       .parse(doc.data());
 }
 }  // namespace ARDUINOJSON_NAMESPACE
